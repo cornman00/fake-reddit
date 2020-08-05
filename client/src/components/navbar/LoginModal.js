@@ -2,36 +2,96 @@ import React, { useState } from "react";
 import axios from "axios";
 import "../../App.scss";
 import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
+import GoogleLogin from "react-google-login";
 
-const LoginModal = () => {
+const LoginModal = ({ updateToken }) => {
   const [modal, setModal] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({
+    username_error: "",
+    password_error: "",
+  });
 
   const toggle = () => setModal(!modal);
 
   const handleSubmit = (e) => {
+    const isValid = formValidate();
     e.preventDefault();
-    const user = { username: username, password: password };
+    if (isValid) {
+      axios
+        .post("/login", {
+          username: username,
+          password: password,
+        })
+        .then((res) => res.data)
+        .then((data) => {
+          toggle();
+          localStorage.setItem("userToken", data.access_token);
+          localStorage.setItem("username", data.username);
+          updateToken();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
-    axios
-      .post("/login", {
-        username: username,
-        password: password,
-      })
-      .then((res) => {
-        localStorage.setItem("usertoken", res.data);
-        console.log("Returned User" + user.username);
-        console.log(res.error_message);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const formValidate = () => {
+    let isValid = true;
+    setErrors({});
+
+    if (!username) {
+      setErrors((prev) => ({
+        ...prev,
+        ["username_error"]: "Empty Username",
+      }));
+      isValid = false;
+    } else if (username.length <= 4 || username.length >= 21) {
+      setErrors((prev) => ({
+        ...prev,
+        ["username_error"]:
+          "The length of username should be between 5 and 20.",
+      }));
+      isValid = false;
+    }
+
+    if (!password) {
+      setErrors((prev) => ({
+        ...prev,
+        ["password_error"]: "Empty Password",
+      }));
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
+  const googleOnSuccess = (res) => {
+    console.log(res);
+    const userEmail = res.profileObj.email;
+    const parsed_username = userEmail.substring(0, userEmail.indexOf("@"));
+    setUsername(parsed_username);
+    localStorage.setItem("userToken", res.tokenObj.access_token);
+    localStorage.setItem("username", parsed_username);
+    updateToken();
+    alert("Logged In Successfully");
+  };
+
+  const googleOnFailure = (res) => {
+    console.log(res);
   };
 
   return (
     <div>
-      <Button className="nav-button login-button" color="link" onClick={toggle}>
+      <Button
+        className="nav-button login-button"
+        color="link"
+        onClick={() => {
+          toggle();
+          setErrors({});
+        }}
+      >
         LOG IN
       </Button>
 
@@ -40,11 +100,24 @@ const LoginModal = () => {
           Log in
         </ModalHeader>
         <ModalBody className="modal-body">
-          <Button color="link" className="google-button">
-            <i class="fab fa-google"></i>
-            CONTINUE WITH GOOGLE
-          </Button>
-          <form method="POST" onSubmit={handleSubmit}>
+          <GoogleLogin
+            clientId="1087910724182-02v9tf6jm6h867i3vd81rui2dm4b6jvb.apps.googleusercontent.com"
+            render={(renderProps) => (
+              <Button
+                onClick={renderProps.onClick}
+                disabled={renderProps.disabled}
+                color="link"
+                className="google-button"
+              >
+                <i class="fab fa-google"></i>
+                CONTINUE WITH GOOGLE
+              </Button>
+            )}
+            onSuccess={googleOnSuccess}
+            onFailure={googleOnFailure}
+            cookiePolicy={"single_host_origin"}
+          />
+          <form method="POST" onSubmit={handleSubmit} noValidate>
             <div className="input-buttons-wrapper">
               <input
                 type="text"
@@ -53,6 +126,7 @@ const LoginModal = () => {
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
+              <div className="error-message">{errors["username_error"]}</div>
               <input
                 type="password"
                 name="password"
@@ -60,17 +134,16 @@ const LoginModal = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
+              <div className="error-message">{errors["password_error"]}</div>
             </div>
             <Button
               type="submit"
               className="modal-login-button"
               color="primary"
-              onClick={toggle}
             >
               LOG IN
             </Button>
           </form>
-          <p className="go-to-signup">New to FakeReddit? SIGN UP </p>
         </ModalBody>
       </Modal>
     </div>

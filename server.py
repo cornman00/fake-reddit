@@ -45,9 +45,8 @@ def signup():
             'username': username,
             'password': password
         }
-
         return jsonify(new_user=new_user)
-    return "Register Success"
+    return
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -68,9 +67,9 @@ def login():
             if bcrypt.check_password_hash(rv['password'], password):
                 access_token = create_access_token(
                     identity={'username': rv['username']})
-                result = jsonify(access_token=access_token)
+                result = jsonify(access_token=access_token, username=username)
             else:
                 print("Invalid Password")
                 result = jsonify(error_message="Invalid Password")
             return result
-    return "Login Page"
+    return
