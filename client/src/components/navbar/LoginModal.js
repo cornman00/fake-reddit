@@ -26,12 +26,21 @@ const LoginModal = ({ updateToken }) => {
         })
         .then((res) => res.data)
         .then((data) => {
-          toggle();
-          localStorage.setItem("userToken", data.access_token);
-          localStorage.setItem("username", data.username);
-          updateToken();
+          if ("error_message" in data) {
+            setErrors((prev) => ({
+              ...prev,
+              ["password_error"]: data.error_message,
+            }));
+          } else {
+            toggle();
+            localStorage.setItem("userToken", data.access_token);
+            localStorage.setItem("username", data.username);
+            updateToken();
+          }
         })
         .catch((err) => {
+          toggle();
+          alert("Sign up failed. Please try again later");
           console.log(err);
         });
     }

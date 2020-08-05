@@ -25,15 +25,21 @@ CORS(app)
 def signup():
     if request.method == 'POST':
         data = request.get_json()
-        if isEmail(data['email']):
-            email = data['email']
-        else:
-            print('Not a valid email')
-            return "Register Failed"
+        email = data['email']
         username = data['username']
         password = bcrypt.generate_password_hash(
             data['password']).decode('utf-8')
         cur = mysql.connection.cursor()
+        cur.execute(
+            "SELECT * FROM users WHERE email = '{0}'".format(email))
+        rv = cur.fetchone()
+        if rv:
+            return jsonify(error_message="Email already exists")
+        cur.execute(
+            "SELECT * FROM users WHERE username = '{0}'".format(username))
+        rv = cur.fetchone()
+        if rv:
+            return jsonify(error_message="Username already exists")
 
         cur.execute("INSERT INTO users(email, username, password) VALUES (%s, %s, %s)",
                     (email, username, password))
@@ -62,14 +68,13 @@ def login():
         rv = cur.fetchone()
 
         if not rv:
-            print("Username does not exist")
+            return jsonify(error_message="Username does not exist.")
         else:
             if bcrypt.check_password_hash(rv['password'], password):
                 access_token = create_access_token(
                     identity={'username': rv['username']})
                 result = jsonify(access_token=access_token, username=username)
             else:
-                print("Invalid Password")
-                result = jsonify(error_message="Invalid Password")
+                result = jsonify(error_message="Wrong Password")
             return result
     return

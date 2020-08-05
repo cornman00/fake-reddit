@@ -31,10 +31,18 @@ const SignupModal = ({ updateToken }) => {
           username: username,
           password: password1,
         })
-        .then((res) => {
-          toggle();
-          alert("Successfully signed up\nPlease Log in");
-          console.log("New User: " + username);
+        .then((res) => res.data)
+        .then((data) => {
+          if ("error_message" in data) {
+            setErrors((prev) => ({
+              ...prev,
+              ["password2_error"]: data.error_message,
+            }));
+          } else {
+            toggle();
+            alert("Successfully signed up\nPlease Log in");
+            console.log("New User: " + username);
+          }
         })
         .catch((err) => {
           toggle();
@@ -173,7 +181,7 @@ const SignupModal = ({ updateToken }) => {
               <input
                 type="password"
                 name="password2"
-                placeholder="Confirm Password"
+                placeholder="CONFIRM PASSWORD"
                 onChange={(e) => setPassword2(e.target.value)}
                 required
               />
