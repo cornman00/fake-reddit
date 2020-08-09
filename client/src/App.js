@@ -3,6 +3,7 @@ import "./App.scss";
 import { Switch, Route } from "react-router-dom";
 import Home from "./components/home/Home";
 import Navbar from "./components/navbar/Navbar";
+import CreatePost from "./components/post/CreatePost";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Navbar />
       <Switch>
         <Route exact path="/" component={Home} />
+        <Route path="/submit" component={CreatePost} />
       </Switch>
     </>
   );

@@ -90,9 +90,11 @@ const LoginModal = ({ updateToken }) => {
   const googleOnFailure = (res) => {
     console.log(res);
   };
-
+  
+ 
   return (
-    <div>
+  
+    <div> 
       <Button
         className="nav-button login-button"
         color="link"

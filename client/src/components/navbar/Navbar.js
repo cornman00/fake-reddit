@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../../App.scss";
 import {
   Dropdown,
@@ -6,17 +6,14 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
-import { Link, BrowserRouter as Router, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
-import jwt_decode from "jwt-decode";
 
 const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
-
-  console.log(token);
 
   const updateToken = () => {
     if (localStorage.getItem("userToken")) {
@@ -33,6 +30,10 @@ const Navbar = () => {
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
+  let isLoggedIn = localStorage.getItem('userToken');
+  let user_name = localStorage.getItem('username');
+  
+  
   return (
     <nav className="nav-container">
       <Link className="page-title" to="/">
@@ -51,7 +52,7 @@ const Navbar = () => {
       </form>
 
       <div className="button-container">
-        {!token ? (
+        {isLoggedIn === null? (
           <>
             <LoginModal updateToken={updateToken} />
             <SignupModal updateToken={updateToken} />
@@ -59,9 +60,10 @@ const Navbar = () => {
         ) : (
           <div></div>
         )}
+      
         <Dropdown size="sm" isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle className="dropdown-toggle">
-            {!username ? (
+            {isLoggedIn === null ? (
               <i className="fas fa-user"></i>
             ) : (
               <>
@@ -69,16 +71,16 @@ const Navbar = () => {
                   <i className="fas fa-user"></i>
                 </span>
                 <span>
-                  <p>{username}</p>
+                  <p>{user_name}</p>
                 </span>
               </>
             )}
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem header>MORE STUFF</DropdownItem>
-            <DropdownItem>Help Center</DropdownItem>
+            <DropdownItem><a id="help-tag" href="https://www.reddithelp.com/hc/en-us" target="_blank" rel="noopener noreferrer">Help Center</a></DropdownItem>
             <DropdownItem divider />
-            {!token ? (
+            {isLoggedIn === null ? (
               <DropdownItem>Log In / Sign Up</DropdownItem>
             ) : (
               <DropdownItem onClick={logOut}>Log Out</DropdownItem>
