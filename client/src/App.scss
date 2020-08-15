@@ -2,7 +2,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 /* Navbar Style */
@@ -58,6 +58,10 @@ body {
         border: 1px solid #7a9fff;
       }
     }
+  }
+
+  .logout-button {
+    color: black;
   }
 
   // @media only screen and (max-width: 1100px) {
@@ -176,11 +180,10 @@ body {
 
 .main-container {
   background-color: #0a4893;
-  height: 100vh;
+  // height: auto;
 
   .contents {
     padding: 20px 320px;
-    height: 100vh;
     display: flex;
 
     .left-contents {
@@ -307,23 +310,28 @@ body {
 
 .post-summary-container {
   background-color: white;
-  height: 200px;
-  min-height: 100px;
+  height: auto;
+  min-height: 180px;
+  max-height: 400px;
   width: 640px;
   min-width: 570px;
   margin-right: 25px;
+  margin-bottom: 25px;
   border-radius: 7px;
   display: flex;
 
   .vote-bar {
     position: relative;
-    width: 30px;
+    min-width: 30px;
+    width: auto;
     background-color: #cddcee;
     border-top-left-radius: 7px;
     border-bottom-left-radius: 7px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-weight: bold;
+    font-size: 12px;
 
     i {
       margin-top: 8px;
@@ -338,6 +346,12 @@ body {
         color: #7f7f7f;
       }
     }
+
+    .fa-arrow-up:hover,
+    .fa-arrow-down:hover {
+      color: orange;
+    }
+
     .fa-circle {
       font-size: 5px;
     }
@@ -368,6 +382,7 @@ body {
 .post-button-container {
   display: flex;
   height: 60px;
+  min-height: 60px;
   width: 640px;
   min-width: 570px;
   margin-right: 25px;
@@ -403,7 +418,7 @@ body {
 .create-post-container {
   display: flex;
   padding: 45px 300px;
-  background-color: lightgrey;
+  background-color: #eef5fb;
   height: 100vh;
 
   .create-post-left-container {
@@ -413,9 +428,43 @@ body {
     min-width: 570px;
     margin-right: 25px;
 
+    .post-container {
+      width: 740px;
+      min-width: 570px;
+      min-height: 400px;
+      height: auto;
+      background-color: white;
+
+      .post-button {
+        margin: 20px;
+        float: right;
+        width: 85px;
+      }
+
+      input {
+        padding-left: 15px;
+        width: 700px;
+        min-width: 530px;
+        margin: 20px 20px 10px 20px;
+        height: 40px;
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+      }
+
+      textarea {
+        margin: 20px;
+        width: 700px;
+        min-width: 530px;
+        padding-left: 15px;
+        padding-top: 10px;
+        height: 200px;
+        border: 1px solid #dddddd;
+        border-radius: 5px;
+      }
+    }
+
     p {
       font-size: 18px;
-
       margin-bottom: 0px;
     }
 

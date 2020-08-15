@@ -30,10 +30,9 @@ const Navbar = () => {
 
   const toggle = () => setDropdownOpen((prevState) => !prevState);
 
-  let isLoggedIn = localStorage.getItem('userToken');
-  let user_name = localStorage.getItem('username');
-  
-  
+  let isLoggedIn = localStorage.getItem("userToken");
+  let user_name = localStorage.getItem("username");
+
   return (
     <nav className="nav-container">
       <Link className="page-title" to="/">
@@ -52,7 +51,7 @@ const Navbar = () => {
       </form>
 
       <div className="button-container">
-        {isLoggedIn === null? (
+        {isLoggedIn === null ? (
           <>
             <LoginModal updateToken={updateToken} />
             <SignupModal updateToken={updateToken} />
@@ -60,7 +59,7 @@ const Navbar = () => {
         ) : (
           <div></div>
         )}
-      
+
         <Dropdown size="sm" isOpen={dropdownOpen} toggle={toggle}>
           <DropdownToggle className="dropdown-toggle">
             {isLoggedIn === null ? (
@@ -78,12 +77,25 @@ const Navbar = () => {
           </DropdownToggle>
           <DropdownMenu right>
             <DropdownItem header>MORE STUFF</DropdownItem>
-            <DropdownItem><a id="help-tag" href="https://www.reddithelp.com/hc/en-us" target="_blank" rel="noopener noreferrer">Help Center</a></DropdownItem>
+            <DropdownItem>
+              <a
+                id="help-tag"
+                href="https://www.reddithelp.com/hc/en-us"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Help Center
+              </a>
+            </DropdownItem>
             <DropdownItem divider />
             {isLoggedIn === null ? (
               <DropdownItem>Log In / Sign Up</DropdownItem>
             ) : (
-              <DropdownItem onClick={logOut}>Log Out</DropdownItem>
+              <DropdownItem onClick={logOut}>
+                <Link to="/" className="logout-button">
+                  Log Out
+                </Link>
+              </DropdownItem>
             )}
           </DropdownMenu>
         </Dropdown>
