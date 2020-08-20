@@ -5,8 +5,9 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
+  Button,
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, Route } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 
@@ -14,6 +15,12 @@ const Navbar = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
+  const [logModal, setLogModal] = useState(false);
+  const [signModal, setSignModal] = useState(false);
+
+  const logModalToggle = () => setLogModal(!logModal);
+
+  const signModalToggle = () => setSignModal(!signModal);
 
   const updateToken = () => {
     if (localStorage.getItem("userToken")) {
@@ -53,8 +60,20 @@ const Navbar = () => {
       <div className="button-container">
         {isLoggedIn === null ? (
           <>
-            <LoginModal updateToken={updateToken} />
-            <SignupModal updateToken={updateToken} />
+            <Button
+              className="nav-button login-button"
+              color="link"
+              onClick={logModalToggle}
+            >
+              LOG IN
+            </Button>
+            <Button
+              className="nav-button signup-button"
+              color="primary"
+              onClick={signModalToggle}
+            >
+              SIGN UP
+            </Button>
           </>
         ) : (
           <div></div>
@@ -89,7 +108,9 @@ const Navbar = () => {
             </DropdownItem>
             <DropdownItem divider />
             {isLoggedIn === null ? (
-              <DropdownItem>Log In / Sign Up</DropdownItem>
+              <DropdownItem>
+                <p onClick={logModalToggle}>Log In / Sign Up</p>
+              </DropdownItem>
             ) : (
               <DropdownItem onClick={logOut}>
                 <Link to="/" className="logout-button">
@@ -99,6 +120,16 @@ const Navbar = () => {
             )}
           </DropdownMenu>
         </Dropdown>
+        <LoginModal
+          updateToken={updateToken}
+          logModalToggle={logModalToggle}
+          logModal={logModal}
+        />
+        <SignupModal
+          updateToken={updateToken}
+          signModalToggle={signModalToggle}
+          signModal={signModal}
+        />
       </div>
     </nav>
   );

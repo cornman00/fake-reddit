@@ -34,7 +34,7 @@ const CreatePost = () => {
       <div className="create-post-left-container">
         <p>Create a post</p>
         <hr />
-        <div className="post-container">
+        <div className="post-box">
           <form method="POST" onSubmit={handleSubmit}>
             <input
               type="text"
@@ -55,7 +55,8 @@ const CreatePost = () => {
           </form>
         </div>
       </div>
-      <CommunityBanner className="create-post-community-banner" />
+
+      <CommunityBanner />
     </div>
   );
 };

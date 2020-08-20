@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Header from "./Header";
 import CommunityBanner from "./CommunityBanner";
-import PostSummary from "./PostSummary";
+import PostSummary from "../post/PostSummary";
 import PostButton from "./PostButton";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -36,7 +37,6 @@ const Home = () => {
               />
             ))}
         </div>
-
         <CommunityBanner />
       </div>
     </div>

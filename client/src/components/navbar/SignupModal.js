@@ -5,8 +5,7 @@ import { Button, Modal, ModalHeader, ModalBody } from "reactstrap";
 import GoogleLogin from "react-google-login";
 import { emailCheck } from "../../utilFunctions";
 
-const SignupModal = ({ updateToken }) => {
-  const [modal, setModal] = useState(false);
+const SignupModal = ({ updateToken, signModalToggle, signModal }) => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password1, setPassword1] = useState("");
@@ -17,8 +16,6 @@ const SignupModal = ({ updateToken }) => {
     password1_error: "",
     password2_error: "",
   });
-
-  const toggle = () => setModal(!modal);
 
   const handleSubmit = (e) => {
     const isValid = formValidate();
@@ -39,13 +36,13 @@ const SignupModal = ({ updateToken }) => {
               ["password2_error"]: data.error_message,
             }));
           } else {
-            toggle();
+            signModalToggle();
             alert("Successfully signed up\nPlease Log in");
             console.log("New User: " + username);
           }
         })
         .catch((err) => {
-          toggle();
+          signModalToggle();
           alert("Sign up failed. Please try again later");
           console.log(err);
         });
@@ -120,18 +117,8 @@ const SignupModal = ({ updateToken }) => {
 
   return (
     <div>
-      <Button
-        className="nav-button signup-button"
-        color="primary"
-        onClick={() => {
-          toggle();
-          setErrors({});
-        }}
-      >
-        SIGN UP
-      </Button>
-      <Modal className="auth-modal" isOpen={modal} toggle={toggle}>
-        <ModalHeader className="modal-header" toggle={toggle}>
+      <Modal className="auth-modal" isOpen={signModal} toggle={signModalToggle}>
+        <ModalHeader className="modal-header" toggle={signModalToggle}>
           Sign up
         </ModalHeader>
         <ModalBody className="modal-body">
