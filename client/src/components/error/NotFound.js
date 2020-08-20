@@ -4,8 +4,6 @@ function NotFound() {
   return (
     <div className="not-found">
       <i class="fas fa-bug"></i>
-      <br />
-
       <p id="nf-msg">Not Found</p>
     </div>
   );
