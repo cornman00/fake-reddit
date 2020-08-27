@@ -5,6 +5,7 @@ import Home from "./components/home/Home";
 import Navbar from "./components/navbar/Navbar";
 import CreatePost from "./components/post/CreatePost";
 import Post from "./components/post/Post";
+import NotFound from "./components/error/NotFound";
 
 function App() {
   return (
@@ -12,8 +13,9 @@ function App() {
       <Navbar />
       <Switch>
         <Route exact path="/" component={Home} />
-        <Route path="/submit" component={CreatePost} />
-        <Route path="/post" component={Post} />
+        <Route exact path="/submit" component={CreatePost} />
+        <Route exact path="/comments/:postID/:postTitle" component={Post} />
+        <Route component={NotFound} />
       </Switch>
     </>
   );

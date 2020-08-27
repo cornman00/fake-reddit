@@ -4,7 +4,6 @@ import Header from "./Header";
 import CommunityBanner from "./CommunityBanner";
 import PostSummary from "../post/PostSummary";
 import PostButton from "./PostButton";
-import { Link } from "react-router-dom";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -23,19 +22,21 @@ const Home = () => {
       <Header />
       <div className="contents">
         <div className="left-contents">
-          <PostButton />
+          {localStorage.getItem("userToken") ? <PostButton /> : <div></div>}
           {posts &&
-            posts.map((post) => (
-              <PostSummary
-                postID={post.postID}
-                title={post.title}
-                content={post.content}
-                username={post.username}
-                comments_num={post.num_of_comments}
-                createdAt={post.createdAt}
-                upVote={post.upVote}
-              />
-            ))}
+            posts.map((post) => {
+              return (
+                <PostSummary
+                  postID={post.postID}
+                  title={post.title}
+                  content={post.content}
+                  username={post.username}
+                  comments_num={post.num_of_comments}
+                  createdAt={post.createdAt}
+                  upVote={post.upVote}
+                />
+              );
+            })}
         </div>
         <CommunityBanner />
       </div>

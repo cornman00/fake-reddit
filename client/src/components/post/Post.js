@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import CommunityBanner from "../home/CommunityBanner";
 import axios from "axios";
 import LoginModal from "../navbar/LoginModal";
@@ -6,21 +7,60 @@ import SignupModal from "../navbar/SignupModal";
 import Comment from "./Comment";
 import { Button } from "reactstrap";
 
-const Post = ({
-  postID,
-  title,
-  content,
-  user_name,
-  comments_num,
-  createdAt,
-  upVote,
-}) => {
-  const [newUpVote, setUpVote] = useState(3);
+const Post = () => {
+  const [newUpVote, setUpVote] = useState(0);
   const [upVoteClicked, setUpVoteClicked] = useState(false);
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [createdAt, setCreatedAt] = useState("");
+  const [numComments, setNumComments] = useState(0);
   const [logModal, setLogModal] = useState(false);
   const [signModal, setSignModal] = useState(false);
+  const [comment_content, setCommentContent] = useState("");
+  const [commentList, setCommentList] = useState([]);
+  const postID = useParams().postID;
+  const upVote = newUpVote;
+
+  useEffect(() => {
+    axios
+      .get("/post", { params: { postID: postID } })
+      .then((res) => res.data)
+      .then((data) => {
+        let post = data.post;
+        setUsername(post.username);
+        setUpVote(post.upVote);
+        setTitle(post.title);
+        setContent(post.content);
+        setCreatedAt(post.createdAt);
+      })
+      .catch(console.log("Post Load Error"));
+    getComment();
+  }, []);
+
+  const postComment = (e) => {
+    e.preventDefault();
+    axios
+      .post("http://localhost:5000/post_comment", {
+        username: localStorage.getItem("username"),
+        content: comment_content,
+        postID: postID,
+      })
+      .then(window.location.reload());
+  };
+
+  const getComment = () => {
+    axios
+      .get("http://localhost:5000/get_comment", { params: { postID: postID } })
+      .then((res) => res.data)
+      .then((data) => {
+        console.log(data);
+        setCommentList(data.comments);
+        setNumComments(data.comments.length);
+      })
+      .catch((err) => console.log(err));
+  };
 
   const logModalToggle = () => setLogModal(!logModal);
 
@@ -59,9 +99,9 @@ const Post = ({
               }}
               className="vote-button"
             >
-              <i class="fas fa-arrow-up"></i>
+              <i className="fas fa-arrow-up"></i>
             </button>
-            {newUpVote === 0 ? <i class="fas fa-circle "></i> : newUpVote}
+            {newUpVote === 0 ? <i className="fas fa-circle "></i> : newUpVote}
             <button
               onClick={() => {
                 if (!upVoteClicked) {
@@ -78,28 +118,19 @@ const Post = ({
               }}
               className="vote-button"
             >
-              <i class="fas fa-arrow-down"></i>
+              <i className="fas fa-arrow-down"></i>
             </button>
           </div>
           <div className="post-contents">
-            <p className="posted-by">Posted by u/username createdAt</p>
-            <p className="post-title">First Post</p>
-            <p className="post-content">
-              sadlfjad Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Modi molestiae reiciendis a magni cum sequi rem vel illum rerum
-              itaque, saepe ex odio dolorum error obcaecati corporis at incidunt
-              dolorem. Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-              Impedit recusandae amet cum aspernatur doloribus quo consequuntur,
-              fugit cumque unde dolor iusto quidem? Reiciendis nihil eveniet,
-              hic obcaecati omnis temporibus dolorem modi? Sequi repudiandae
-              asperiores accusantium qui eaque nam consectetur quia enim
-              commodi, natus dignissimos nesciunt dicta inventore ipsum voluptas
-              corporis!
+            <p className="posted-by">
+              Posted by u/{username} {createdAt}
             </p>
-            <div className="summary-functions">40 Comments</div>
+            <p className="post-title">{title}</p>
+            <p className="post-content">{content}</p>
+            <div className="summary-functions">{numComments} Comments</div>
             {localStorage.getItem("userToken") ? (
               <div className="comment-box-container">
-                <form method="POST">
+                <form method="POST" onSubmit={postComment}>
                   <textarea
                     className="comment-box"
                     name=""
@@ -107,9 +138,17 @@ const Post = ({
                     cols="30"
                     rows="10"
                     placeholder="What are your thoughts?"
+                    onChange={(e) => {
+                      setCommentContent(e.target.value);
+                    }}
                   ></textarea>
                   <div id="cmt-btn-container">
-                    <Button type="submit" color="primary" id="comment-btn">
+                    <Button
+                      type="submit"
+                      color="primary"
+                      id="comment-btn"
+                      disabled={!comment_content}
+                    >
                       COMMENT
                     </Button>
                   </div>
@@ -151,7 +190,18 @@ const Post = ({
 
         <div className="comment-container">
           <div id="hrLine"></div>
-          <Comment />
+          {commentList &&
+            commentList.map((comment) => {
+              return (
+                <Comment
+                  commentID={comment.commentID}
+                  username={comment.username}
+                  createdAt={comment.createdAt}
+                  content={comment.content}
+                  points={comment.points}
+                />
+              );
+            })}
         </div>
       </div>
 

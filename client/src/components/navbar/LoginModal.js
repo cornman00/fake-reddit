@@ -105,7 +105,7 @@ const LoginModal = ({ updateToken, logModalToggle, logModal }) => {
                 color="link"
                 className="google-button"
               >
-                <i class="fab fa-google"></i>
+                <i className="fab fa-google"></i>
                 CONTINUE WITH GOOGLE
               </Button>
             )}

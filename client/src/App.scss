@@ -331,6 +331,7 @@ body {
 }
 
 .post-summary-container {
+  position: relative;
   display: flex;
   background-color: white;
   height: auto;
@@ -378,7 +379,8 @@ body {
 
   .summary-contents {
     padding: 8px;
-
+    width: 610px;
+    min-width: 570px;
     .posted-by {
       font-size: 12px;
       color: grey;
@@ -386,6 +388,10 @@ body {
 
     .post-summary-title {
       font-size: 22px;
+    }
+
+    .post-summary {
+      font-weight: lighter;
     }
 
     .summary-functions {
@@ -437,70 +443,71 @@ body {
 
 .create-post-container {
   display: flex;
-  padding: 45px 280px;
   background-color: #eef5fb;
   justify-content: center;
   height: 100vh;
+  width: 100%;
 
-  .community-container {
+  .create-post-main {
+    padding: 45px 280px;
     display: flex;
-  }
+    justify-content: center;
 
-  .create-post-left-container {
-    display: flex;
-    flex-direction: column;
-    width: 740px;
-    min-width: 570px;
-    margin-right: 25px;
-    position: relative;
-
-    .post-box {
-      position: absolute;
+    .create-post-left-container {
+      display: flex;
+      flex-direction: column;
       width: 740px;
-      min-width: 570px;
-      min-height: 350px;
-      top: 70px;
+      min-width: 550px;
+      margin-right: 25px;
+      position: relative;
 
-      height: auto;
-      background-color: white;
+      .post-box {
+        position: absolute;
+        width: 740px;
+        min-width: 550px;
+        min-height: 350px;
+        top: 70px;
+        height: auto;
+        background-color: white;
 
-      .post-button {
-        margin: 20px;
-        float: right;
-        width: 85px;
+        .post-button {
+          margin: 20px;
+          float: right;
+          width: 85px;
+        }
+
+        input {
+          padding-left: 15px;
+          width: 700px;
+          min-width: 530px;
+          margin: 20px 20px 10px 20px;
+          height: 40px;
+          border: 1px solid #dddddd;
+          border-radius: 5px;
+        }
+
+        textarea {
+          margin: 20px;
+          width: 700px;
+          min-width: 530px;
+          padding-left: 15px;
+          padding-top: 10px;
+          height: 200px;
+          border: 1px solid #dddddd;
+          border-radius: 5px;
+        }
       }
 
-      input {
-        padding-left: 15px;
-        width: 700px;
-        min-width: 530px;
-        margin: 20px 20px 10px 20px;
-        height: 40px;
+      p {
+        font-size: 18px;
+        margin-bottom: 0px;
+      }
+
+      hr {
+        margin-top: 7px;
         border: 1px solid #dddddd;
-        border-radius: 5px;
+        width: 100%;
       }
-
-      textarea {
-        margin: 20px;
-        width: 700px;
-        min-width: 530px;
-        padding-left: 15px;
-        padding-top: 10px;
-        height: 200px;
-        border: 1px solid #dddddd;
-        border-radius: 5px;
-      }
-    }
-
-    p {
-      font-size: 18px;
-      margin-bottom: 0px;
-    }
-
-    hr {
-      margin-top: 7px;
-      border: 1px solid #dddddd;
-      width: 100%;
     }
   }
 }
@@ -519,7 +526,8 @@ body {
   display: flex;
   justify-content: center;
   background-color: #f2f2f2;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
 
   .post-left-container {
     display: flex;
@@ -529,7 +537,6 @@ body {
     .content-box {
       display: flex;
       height: auto;
-      min-height: 180px;
       width: 700px;
       min-width: 570px;
       background-color: white;
@@ -613,6 +620,7 @@ body {
         .comment-box-container2 {
           display: flex;
           justify-content: space-between;
+          width: 610px;
           height: 55px;
           border: 1px solid #dddddd;
           border-radius: 5px;
@@ -704,6 +712,13 @@ body {
       color: black;
       margin-bottom: 0;
       font-weight: lighter;
+      display: flex;
+      align-items: center;
+
+      i {
+        font-size: 2px;
+        margin: 0px 5px;
+      }
     }
 
     .comment-text {
@@ -721,5 +736,25 @@ body {
         font-size: 12px;
       }
     }
+  }
+}
+
+/* NotFound */
+
+.not-found {
+  height: 100vh;
+  background-color: #f2f2f2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  i {
+    font-size: 200px;
+    color: orange;
+  }
+
+  #nf-msg {
+    font-size: 40px;
   }
 }

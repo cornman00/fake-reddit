@@ -31,32 +31,34 @@ const CreatePost = () => {
 
   return (
     <div className="create-post-container">
-      <div className="create-post-left-container">
-        <p>Create a post</p>
-        <hr />
-        <div className="post-box">
-          <form method="POST" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="title"
-              placeholder="Title"
-              onChange={(e) => setTitle(e.target.value)}
-              required
-            />
-            <textarea
-              id="content"
-              name="content"
-              placeholder="Text(optional)"
-              onChange={(e) => setContent(e.target.value)}
-            />
-            <Button type="submit" className="post-button" color="primary">
-              POST
-            </Button>
-          </form>
+      <div className="create-post-main">
+        <div className="create-post-left-container">
+          <p>Create a post</p>
+          <hr />
+          <div className="post-box">
+            <form method="POST" onSubmit={handleSubmit}>
+              <input
+                type="text"
+                name="title"
+                placeholder="Title"
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+              <textarea
+                id="content"
+                name="content"
+                placeholder="Text(optional)"
+                onChange={(e) => setContent(e.target.value)}
+              />
+              <Button type="submit" className="post-button" color="primary">
+                POST
+              </Button>
+            </form>
+          </div>
         </div>
-      </div>
 
-      <CommunityBanner />
+        <CommunityBanner />
+      </div>
     </div>
   );
 };
