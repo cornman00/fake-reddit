@@ -35,19 +35,21 @@ const Post = () => {
         setContent(post.content);
         setCreatedAt(post.createdAt);
       })
-      .catch(console.log("Post Load Error"));
+      .catch((err) => console.log("Post Load Error"));
     getComment();
   }, []);
 
   const postComment = (e) => {
     e.preventDefault();
+    console.log(`POST operation comment ${postID}`);
     axios
       .post("http://localhost:5000/post_comment", {
         username: localStorage.getItem("username"),
         content: comment_content,
         postID: postID,
       })
-      .then(window.location.reload());
+      .then(window.location.reload())
+      .catch((err) => console.log(err));
   };
 
   const getComment = () => {
@@ -199,6 +201,7 @@ const Post = () => {
                   createdAt={comment.createdAt}
                   content={comment.content}
                   points={comment.points}
+                  postID={postID}
                 />
               );
             })}

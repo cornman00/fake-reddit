@@ -1,25 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button } from "reactstrap";
-import Reply from "./Reply";
 
-const Comment = ({
-  commentID,
-  username,
-  createdAt,
-  content,
-  points,
-  postID,
-}) => {
+const Reply = ({ commentID, username, createdAt, content, points }) => {
   const [newUpVote, setUpVote] = useState(points);
   const [upVoteClicked, setUpVoteClicked] = useState(false);
   const [showReply, setShowReply] = useState(false);
   const [replyContent, setReplyContent] = useState("");
-  const [replyList, setReplyList] = useState([]);
-
-  useEffect(() => {
-    getReply();
-  }, []);
 
   const upVoteComment = (isUpVote) => {
     axios
@@ -31,34 +18,9 @@ const Comment = ({
       .then((data) => console.log(data.message));
   };
 
-  const postReply = (e) => {
-    e.preventDefault();
-    axios
-      .post("http://localhost:5000/post_reply", {
-        parentID: commentID,
-        username: localStorage.getItem("username"),
-        content: replyContent,
-        postID: postID,
-      })
-      .then(window.location.reload())
-      .catch((err) => console.log(err));
-  };
-
-  const getReply = () => {
-    axios
-      .get("http://localhost:5000/get_reply", {
-        params: { commentID: commentID },
-      })
-      .then((res) => res.data)
-      .then((data) => {
-        console.log(data);
-        setReplyList(data.replies);
-      })
-      .catch((err) => console.log(err));
-  };
-
   return (
-    <div className="cmt-container">
+    <div className="reply-container">
+      <div className="vertical-line"></div>
       <div className="cmt">
         <div className="comment-vote-bar">
           <button
@@ -103,8 +65,6 @@ const Comment = ({
           </p>
           <p className="comment-text">{content}</p>
 
-          {/* Show reply button if user is logged in */}
-
           {localStorage.getItem("username") ? (
             <div className="comment-reply">
               <button
@@ -122,11 +82,9 @@ const Comment = ({
         </div>
       </div>
 
-      {/* Reply box appears when the Reply button is clicked */}
-
       {showReply ? (
         <div className="comment-box-container">
-          <form method="POST" onSubmit={postReply}>
+          <form method="POST">
             <div className="reply">
               <div className="vertical-line"></div>
               <textarea
@@ -156,25 +114,8 @@ const Comment = ({
       ) : (
         <div></div>
       )}
-
-      {/* Display replies */}
-
-      <div className="replies">
-        {replyList &&
-          replyList.map((reply) => {
-            return (
-              <Reply
-                commentID={reply.commentID}
-                username={reply.username}
-                createdAt={reply.createdAt}
-                content={reply.content}
-                points={reply.points}
-              />
-            );
-          })}
-      </div>
     </div>
   );
 };
 
-export default Comment;
+export default Reply;

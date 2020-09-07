@@ -150,9 +150,6 @@ def post_comment():
         username = data['username']
         postID = data['postID']
         content = data['content']
-        print(username)
-        print(postID)
-        print(content)
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO comments(postID, username, createdAt, content) VALUES (%s, %s, %s, %s)",
                     (postID, username, datetime.now(), content))
@@ -168,7 +165,7 @@ def get_comment():
     postID = request.args.get('postID')
     cur = mysql.connection.cursor()
     cur.execute(
-        "SELECT commentID, username, createdAt, content, points FROM comments WHERE postID = '{0}'".format(postID))
+        "SELECT commentID, username, createdAt, content, points FROM comments WHERE parentID IS NULL and postID = '{0}'".format(postID))
     comments = cur.fetchall()
     return jsonify(comments=comments)
 
@@ -190,3 +187,30 @@ def upVote_comment():
             mysql.connection.commit()
         return make_response(jsonify(message="Vote for post updated"), 200)
     return
+
+
+@app.route('/post_reply', methods=['GET', 'POST'])
+def post_reply():
+    if request.method == 'POST':
+        data = request.get_json()
+        parentID = data['parentID']
+        username = data['username']
+        content = data['content']
+        postID = data['postID']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO comments(parentID, username, content, postID, createdAt) VALUES (%s, %s, %s, %s, %s)",
+                    (parentID, username, content, postID, datetime.now()))
+        mysql.connection.commit()
+        return make_response(jsonify(message="Reply Posted"), 200)
+    return
+
+
+@app.route('/get_reply', methods=['GET'])
+def get_reply():
+    commentID = request.args.get('commentID')
+    print(commentID)
+    cur = mysql.connection.cursor()
+    cur.execute(
+        "SELECT username, createdAt, content, points FROM comments WHERE parentID = '{0}'".format(commentID))
+    replies = cur.fetchall()
+    return jsonify(replies=replies)

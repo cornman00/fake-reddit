@@ -7,7 +7,7 @@ import {
   DropdownItem,
   Button,
 } from "reactstrap";
-import { Link, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 
