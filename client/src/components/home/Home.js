@@ -27,6 +27,7 @@ const Home = () => {
             posts.map((post) => {
               return (
                 <PostSummary
+                  key={post.postID}
                   postID={post.postID}
                   title={post.title}
                   content={post.content}

@@ -18,6 +18,18 @@ const Comment = ({
   const [replyList, setReplyList] = useState([]);
 
   useEffect(() => {
+    const getReply = () => {
+      axios
+        .get("http://localhost:5000/get_reply", {
+          params: { commentID: commentID },
+        })
+        .then((res) => res.data)
+        .then((data) => {
+          console.log(data);
+          setReplyList(data.replies);
+        })
+        .catch((err) => console.log(err));
+    };
     getReply();
   }, []);
 
@@ -41,19 +53,6 @@ const Comment = ({
         postID: postID,
       })
       .then(window.location.reload())
-      .catch((err) => console.log(err));
-  };
-
-  const getReply = () => {
-    axios
-      .get("http://localhost:5000/get_reply", {
-        params: { commentID: commentID },
-      })
-      .then((res) => res.data)
-      .then((data) => {
-        console.log(data);
-        setReplyList(data.replies);
-      })
       .catch((err) => console.log(err));
   };
 

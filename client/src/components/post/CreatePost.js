@@ -47,8 +47,9 @@ const CreatePost = () => {
               <textarea
                 id="content"
                 name="content"
-                placeholder="Text(optional)"
+                placeholder="Text"
                 onChange={(e) => setContent(e.target.value)}
+                required
               />
               <Button type="submit" className="post-button" color="primary">
                 POST

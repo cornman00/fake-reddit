@@ -24,18 +24,35 @@ const Post = () => {
   const upVote = newUpVote;
 
   useEffect(() => {
-    axios
-      .get("/post", { params: { postID: postID } })
-      .then((res) => res.data)
-      .then((data) => {
-        let post = data.post;
-        setUsername(post.username);
-        setUpVote(post.upVote);
-        setTitle(post.title);
-        setContent(post.content);
-        setCreatedAt(post.createdAt);
-      })
-      .catch((err) => console.log("Post Load Error"));
+    const getPost = () => {
+      axios
+        .get("/post", { params: { postID: postID } })
+        .then((res) => res.data)
+        .then((data) => {
+          let post = data.post;
+          setUsername(post.username);
+          setUpVote(post.upVote);
+          setTitle(post.title);
+          setContent(post.content);
+          setCreatedAt(post.createdAt);
+        })
+        .catch((err) => console.log("Post Load Error"));
+    };
+    getPost();
+
+    const getComment = () => {
+      axios
+        .get("http://localhost:5000/get_comment", {
+          params: { postID: postID },
+        })
+        .then((res) => res.data)
+        .then((data) => {
+          console.log(data);
+          setCommentList(data.comments);
+          setNumComments(data.comments.length);
+        })
+        .catch((err) => console.log(err));
+    };
     getComment();
   }, []);
 
@@ -49,18 +66,6 @@ const Post = () => {
         postID: postID,
       })
       .then(window.location.reload())
-      .catch((err) => console.log(err));
-  };
-
-  const getComment = () => {
-    axios
-      .get("http://localhost:5000/get_comment", { params: { postID: postID } })
-      .then((res) => res.data)
-      .then((data) => {
-        console.log(data);
-        setCommentList(data.comments);
-        setNumComments(data.comments.length);
-      })
       .catch((err) => console.log(err));
   };
 
@@ -196,6 +201,7 @@ const Post = () => {
             commentList.map((comment) => {
               return (
                 <Comment
+                  key={comment.commentID}
                   commentID={comment.commentID}
                   username={comment.username}
                   createdAt={comment.createdAt}
