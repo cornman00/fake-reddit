@@ -23,7 +23,7 @@ const SignupModal = ({ updateToken, signModalToggle, signModal }) => {
 
     if (isValid) {
       axios
-        .post("/signup", {
+        .post("/api/signup", {
           email: email,
           username: username,
           password: password1,

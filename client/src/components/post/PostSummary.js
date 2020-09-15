@@ -16,7 +16,7 @@ const PostSummary = ({
 
   const upVotePost = (isUpVote) => {
     axios
-      .patch("/posts/upvote", { isUpVote: isUpVote, postID: postID })
+      .patch("/api/posts/upvote", { isUpVote: isUpVote, postID: postID })
       .then((res) => res.data)
       .then((data) => console.log(data.message));
   };

@@ -20,8 +20,8 @@ const Comment = ({
   useEffect(() => {
     const getReply = () => {
       axios
-        .get("http://localhost:5000/get_reply", {
-          params: { commentID: commentID },
+        .get("/api/get_reply", {
+          params: { commentID: commentID, postID: postID },
         })
         .then((res) => res.data)
         .then((data) => {
@@ -35,7 +35,7 @@ const Comment = ({
 
   const upVoteComment = (isUpVote) => {
     axios
-      .patch("/posts/upvote/comment", {
+      .patch("/api/posts/upvote/comment", {
         isUpVote: isUpVote,
         commentID: commentID,
       })
@@ -46,7 +46,7 @@ const Comment = ({
   const postReply = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/post_reply", {
+      .post("/api/post_reply", {
         parentID: commentID,
         username: localStorage.getItem("username"),
         content: replyContent,
@@ -163,6 +163,7 @@ const Comment = ({
           replyList.map((reply) => {
             return (
               <Reply
+                key={reply.commentID}
                 commentID={reply.commentID}
                 username={reply.username}
                 createdAt={reply.createdAt}

@@ -13,7 +13,7 @@ const CreatePost = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("/submit", {
+      .post("/api/submit", {
         title: title,
         content: content,
         username: username,

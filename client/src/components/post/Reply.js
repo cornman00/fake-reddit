@@ -10,7 +10,7 @@ const Reply = ({ commentID, username, createdAt, content, points }) => {
 
   const upVoteComment = (isUpVote) => {
     axios
-      .patch("/posts/upvote/comment", {
+      .patch("/api/posts/upvote/comment", {
         isUpVote: isUpVote,
         commentID: commentID,
       })

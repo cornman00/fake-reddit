@@ -26,7 +26,7 @@ const Post = () => {
   useEffect(() => {
     const getPost = () => {
       axios
-        .get("/post", { params: { postID: postID } })
+        .get("/api/post", { params: { postID: postID } })
         .then((res) => res.data)
         .then((data) => {
           let post = data.post;
@@ -42,14 +42,14 @@ const Post = () => {
 
     const getComment = () => {
       axios
-        .get("http://localhost:5000/get_comment", {
+        .get("/api/get_comment", {
           params: { postID: postID },
         })
         .then((res) => res.data)
         .then((data) => {
           console.log(data);
           setCommentList(data.comments);
-          setNumComments(data.comments.length);
+          setNumComments(data.numComments.num_of_comments);
         })
         .catch((err) => console.log(err));
     };
@@ -60,7 +60,7 @@ const Post = () => {
     e.preventDefault();
     console.log(`POST operation comment ${postID}`);
     axios
-      .post("http://localhost:5000/post_comment", {
+      .post("/api/post_comment", {
         username: localStorage.getItem("username"),
         content: comment_content,
         postID: postID,
@@ -75,7 +75,7 @@ const Post = () => {
 
   const upVotePost = (isUpVote) => {
     axios
-      .patch("/posts/upvote", { isUpVote: isUpVote, postID: postID })
+      .patch("/api/posts/upvote", { isUpVote: isUpVote, postID: postID })
       .then((res) => res.data)
       .then((data) => console.log(data.message));
   };

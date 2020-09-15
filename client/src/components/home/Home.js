@@ -10,7 +10,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("/posts")
+      .get("/api/posts")
       .then((res) => res.data)
       .then((data) => {
         setPosts(data.post_arr);

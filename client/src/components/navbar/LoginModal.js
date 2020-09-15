@@ -17,7 +17,7 @@ const LoginModal = ({ updateToken, logModalToggle, logModal }) => {
     e.preventDefault();
     if (isValid) {
       axios
-        .post("/login", {
+        .post("/api/login", {
           username: username,
           password: password,
         })
